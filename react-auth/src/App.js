@@ -5,7 +5,10 @@ import Layout from './core/Layout';
 const App = () => {
   return (
     <Layout>
-      <h1>React</h1>
+      <div className="col-md-6 offset-md-3">
+        <h1>React Node Auth</h1>
+        
+      </div>
     </Layout>
   )
 }

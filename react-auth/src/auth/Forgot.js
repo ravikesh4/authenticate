@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 import Layout from '../core/Layout';
-import { isAuth } from './Helper';
 
-const Signup = () => {
+const Forgot = ({history}) => {
 
     const [values, setValues] = useState({
-        name: "",
         email: "",
-        password: "",
-        buttonText: "Submit"
+        buttonText: "Request password rest link"
     })
 
-    const { name, email, password, buttonText } = values;
+    const { email, buttonText } = values;
 
     const handleChange = (name) => (event) => {
         //
@@ -27,38 +23,30 @@ const Signup = () => {
         //
         event.preventDefault();
         setValues({ ...values, buttonText: 'Submitting' })
+        // console.log('Send request');
         axios({
-            method: 'POST',
-            url: `${process.env.REACT_APP_API}/signup`,
-            data: { name, email, password }
+            method: 'PUT',
+            url: `${process.env.REACT_APP_API}/forgot-password`,
+            data: { email }
         })
             .then(response => {
-                console.log('Signup Success', response)
-                setValues({ ...values, name: '', email: '', password: '', buttonText: 'Submitted' })
+                console.log('Forgot password Success', response)
                 toast.success(response.data.message)
+                setValues({...values, buttonText: 'Requested'})
             })
             .catch(error => {
-                console.log('Signup error', error.response.data)
-                setValues({ ...values, buttonText: 'Submit'})
+                console.log('Forgot password error', error.response.data)
                 toast.error(error.response.data.error)
+                setValues({ ...values, buttonText: 'Request password rest link' })
             })
     }
 
-    const signupForm = () => (
+    const passwordForgotForm = () => (
         <form>
-            <div className="form-group">
-                <label className="text-muted">Name</label>
-                <input onChange={handleChange('name')} value={name} type="text" className="form-control" />
-            </div>
             <div className="form-group">
                 <label className="text-muted">Email</label>
                 <input onChange={handleChange('email')} value={email} type="email" className="form-control" />
             </div>
-            <div className="form-group">
-                <label className="text-muted">Password</label>
-                <input onChange={handleChange('password')} value={password} type="password" className="form-control" />
-            </div>
-
             <div>
                 <button className="btn btn-primary" onClick={clickSubmit}>{buttonText}</button>
             </div>
@@ -67,18 +55,16 @@ const Signup = () => {
 
     return (
         <Layout>
+            {/* {JSON.stringify(isAuth())} */}
             <div className="col-md-6 offset-md-3">
                 <ToastContainer />
                 {/* {JSON.stringify({ name, email, password })} */}
-                {isAuth() ? <Redirect to="/" /> : null}
-                <h1 className="p-5 text-center">Signup</h1>
-                {signupForm()}
-                <br />
-                <Link to="/auth/password/forgot" className="btn btn-sm btn-outline-danger">Forgot Password?</Link>
+                <h1 className="p-5 text-center">Forget Password</h1>
+                {passwordForgotForm()}
             </div>
         </Layout>
     )
 }
 
 
-export default Signup;
+export default Forgot;
