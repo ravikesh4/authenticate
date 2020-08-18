@@ -39,9 +39,14 @@ const Layout = ({ children, match, history }) => {
                     <Link className="nav-link" to="/admin" style={{ cursor: 'pointer', color: 'white' }}>{isAuth().name}</Link>
                 </li>
             )}
-            {isAuth() && isAuth().role === 'subscriber' && (
+            {isAuth() && isAuth().role === 'vendor' && (
                 <li className="nav-item">
                     <Link className="nav-link" to="/private" style={{ cursor: 'pointer', color: 'white' }}>{isAuth().name}</Link>
+                </li>
+            )}
+            {isAuth() && isAuth().role === 'client' && (
+                <li className="nav-item">
+                    <Link className="nav-link" to="/client" style={{ cursor: 'pointer', color: 'white' }}>{isAuth().name}</Link>
                 </li>
             )}
 

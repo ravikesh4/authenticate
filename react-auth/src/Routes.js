@@ -10,6 +10,8 @@ import Admin from './core/Admin';
 import AdminRoute from './auth/AdminRoute';
 import Forgot from './auth/Forgot';
 import Reset from './auth/Reset';
+import Client from './core/Client';
+import ClientRoute from './auth/ClientRoute';
 
 const Routes = () => {
     return (
@@ -20,6 +22,9 @@ const Routes = () => {
                 <Route path="/signin" component={Signin} />
                 <Route path="/auth/activate/:token" component={Activate} />
                 <PrivateRoute path="/private" component={Private} />
+                <ClientRoute path="/client" component={Client} />
+                <ClientRoute path="/post" component={Client} />
+                <ClientRoute path="/vendors" component={Client} />
                 <AdminRoute path="/admin" component={Admin} />
                 <Route path="/auth/password/forgot" component={Forgot} />
                 <Route path="/auth/password/reset/:token" component={Reset} />

@@ -5,8 +5,9 @@ import { authenticate, isAuth } from './Helper'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'
 import Layout from '../core/Layout';
+import Google from './Google';
 
-const Signin = ({history}) => {
+const Signin = ({ history }) => {
 
     const [values, setValues] = useState({
         email: "",
@@ -38,7 +39,13 @@ const Signin = ({history}) => {
                 authenticate(response, () => {
                     setValues({ ...values, email: '', password: '', buttonText: 'Submitted' })
                     // toast.success(`Hey ${response.data.user.name}, Welcome back!`)
-                    isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('private')
+                    if (isAuth() && isAuth().role === 'admin') { 
+                        history.push('/admin') 
+                    } else if (isAuth() && isAuth().role === 'client'){ 
+                        history.push('client') 
+                    } else {
+                        history.push('private') 
+                    }
                 })
             })
             .catch(error => {
@@ -73,6 +80,7 @@ const Signin = ({history}) => {
                 {isAuth() ? <Redirect to="/" /> : null}
                 {/* {JSON.stringify({ name, email, password })} */}
                 <h1 className="p-5 text-center">Signin</h1>
+                <Google />
                 {signinForm()}
                 <br />
                 <Link to="/auth/password/forgot" className="btn btn-sm btn-outline-danger">Forgot Password?</Link>

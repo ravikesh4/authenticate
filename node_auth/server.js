@@ -9,6 +9,8 @@ require('dotenv').config()
 // import routes
 const authRoutes = require('./routes/auth') 
 const userRoutes = require('./routes/user') 
+const postRoutes = require('./routes/post')
+const categoryRoutes = require('./routes/category')
 
 // mongodb connection 
 mongoose.connect(process.env.DATABASE, {
@@ -32,7 +34,8 @@ if(process.env.NODE_ENV = 'development') {
 // middleware 
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
-
+app.use('/api', postRoutes);
+app.use('/api', categoryRoutes);
 
 
 

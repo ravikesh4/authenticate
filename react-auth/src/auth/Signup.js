@@ -12,10 +12,11 @@ const Signup = () => {
         name: "",
         email: "",
         password: "",
+        role: "",
         buttonText: "Submit"
     })
 
-    const { name, email, password, buttonText } = values;
+    const { name, email, password, role, buttonText } = values;
 
     const handleChange = (name) => (event) => {
         //
@@ -30,16 +31,17 @@ const Signup = () => {
         axios({
             method: 'POST',
             url: `${process.env.REACT_APP_API}/signup`,
-            data: { name, email, password }
+            data: { name, email, password, role }
         })
+        // console.log(values)
             .then(response => {
                 console.log('Signup Success', response)
-                setValues({ ...values, name: '', email: '', password: '', buttonText: 'Submitted' })
+                setValues({ ...values, name: '', email: '', password: '', role:'', buttonText: 'Submitted' })
                 toast.success(response.data.message)
             })
             .catch(error => {
                 console.log('Signup error', error.response.data)
-                setValues({ ...values, buttonText: 'Submit'})
+                setValues({ ...values, buttonText: 'Submit' })
                 toast.error(error.response.data.error)
             })
     }
@@ -58,7 +60,21 @@ const Signup = () => {
                 <label className="text-muted">Password</label>
                 <input onChange={handleChange('password')} value={password} type="password" className="form-control" />
             </div>
-
+                <h6>What you want to be?</h6>
+            <div className="form-group container row">
+                <div className="form-check col-6">
+                    <input className="form-check-input" onChange={handleChange('role')} type="radio" name="exampleRadios" id="client" value={`client`} checked={role === 'client'} />
+                    <label className="form-check-label" htmlFor="client">
+                        Client
+                    </label>
+                </div>
+                <div className="form-check col-6">
+                    <input className="form-check-input" onChange={handleChange('role')} type="radio" name="exampleRadios" id="vendor" value={`vendor`} checked={role === 'vendor'} />
+                    <label className="form-check-label" htmlFor="vendor">
+                        Vendor
+                </label>
+                </div>
+            </div>
             <div>
                 <button className="btn btn-primary" onClick={clickSubmit}>{buttonText}</button>
             </div>

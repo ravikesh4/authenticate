@@ -9,7 +9,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // exports.signup = (req, res) => {
 //     // console.log('Request Body On Signup', req.body);
-//     const {name, email, password} = req.body;
+//     const {name, email, password, role} = req.body;
 // User.findOne({email: email}).exec((err, user) => {
 //     if(user) {
 //         return res.status(400).json({
@@ -18,7 +18,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 //     }
 // })
 
-//     let newUser = new User({name, email, password})
+//     let newUser = new User({name, email, password, role})
 
 //     newUser.save((err, success) => {
 //         if(err) {
@@ -36,7 +36,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 exports.signup = (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     User.findOne({ email }).exec((err, user) => {
         if (user) {
@@ -45,7 +45,7 @@ exports.signup = (req, res) => {
             });
         }
 
-        const token = jwt.sign({ name, email, password }, process.env.JWT_ACCOUNT_ACTIVATION, { expiresIn: '10m' });
+        const token = jwt.sign({ name, email, password, role }, process.env.JWT_ACCOUNT_ACTIVATION, { expiresIn: '10m' });
 
         const emailData = {
             to: email,
@@ -91,10 +91,10 @@ exports.accountActivation = (req, res) => {
                 })
             }
 
-            const { name, email, password } = jwt.decode(token)
+            const { name, email, password, role } = jwt.decode(token)
 
             // saving data in database 
-            const user = new User({ name, email, password })
+            const user = new User({ name, email, password, role })
 
             user.save((err, user) => {
                 if (err) {

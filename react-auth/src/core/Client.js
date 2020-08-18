@@ -7,7 +7,7 @@ import Layout from '../core/Layout';
 import { isAuth, getCookie, signout, updateUser } from '../auth/Helper';
 
 
-const Admin = ({ history }) => {
+const Client = ({ history }) => {
 
     const [values, setValues] = useState({
         role: '',
@@ -32,7 +32,7 @@ const Admin = ({ history }) => {
             }
         })
             .then(response => {
-                console.log('Private Profile update', response);
+                console.log('Client Profile update', response);
                 const { role, name, email } = response.data;
                 setValues({ ...values, role, name, email })
             })
@@ -60,7 +60,7 @@ const Admin = ({ history }) => {
         setValues({ ...values, buttonText: 'Submitting' })
         axios({
             method: 'put',
-            url: `${process.env.REACT_APP_API}/admin/update`,
+            url: `${process.env.REACT_APP_API}/user/update`,
             headers: {
                 Authorization: `Bearer ${token}`
             },
@@ -110,7 +110,7 @@ const Admin = ({ history }) => {
             <div className="col-md-6 offset-md-3">
                 <ToastContainer />
                 {/* {JSON.stringify({ name, email, password })} */}
-                <h1 className="pt-5 text-center">Private</h1>
+                <h1 className="pt-5 text-center">Client</h1>
                 <p className="lead text-center">Profile Update</p>
                 {updateForm()}
             </div>
@@ -119,4 +119,4 @@ const Admin = ({ history }) => {
 }
 
 
-export default Admin;
+export default Client;
