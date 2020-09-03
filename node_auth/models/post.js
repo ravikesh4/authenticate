@@ -24,6 +24,12 @@ const postSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "User"
     },
+    additional: {
+        type: String,
+    },
+    product: {
+        type: String,
+    },
     varified: {
         type: String,
         default: 'no'

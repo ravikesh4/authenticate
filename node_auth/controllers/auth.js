@@ -7,76 +7,76 @@ const _ = require('lodash')
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// exports.signup = (req, res) => {
-//     // console.log('Request Body On Signup', req.body);
-//     const {name, email, password, role} = req.body;
-// User.findOne({email: email}).exec((err, user) => {
-//     if(user) {
-//         return res.status(400).json({
-//             error: 'Email is taken'
-//         })
-//     }
-// })
-
-//     let newUser = new User({name, email, password, role})
-
-//     newUser.save((err, success) => {
-//         if(err) {
-//             console.log('Signup Error', err);
-//             return res.status(400).json({
-//                 error: err
-//             })
-//         }
-//         res.json({
-//             message: 'Signup Success please signin',
-//             user: newUser
-//         })
-//     })
-// }
-
-
 exports.signup = (req, res) => {
-    const { name, email, password, role } = req.body;
-
-    User.findOne({ email }).exec((err, user) => {
+    // console.log('Request Body On Signup', req.body);
+    const { name, email, password, role, mobile, company, address } = req.body;
+    User.findOne({ email: email }).exec((err, user) => {
         if (user) {
             return res.status(400).json({
                 error: 'Email is taken'
-            });
+            })
         }
 
-        const token = jwt.sign({ name, email, password, role }, process.env.JWT_ACCOUNT_ACTIVATION, { expiresIn: '10m' });
+        let newUser = new User({ name, email, password, role, mobile, company, address })
 
-        const emailData = {
-            to: email,
-            from: process.env.EMAIL_FROM,
-            subject: `Account activation link`,
-            text: `Msg for verification`,
-            html: `
-                <h1>Please use the following link to activate your account</h1>
-                <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
-                <hr />
-                <p>This email may contain sensetive information</p>
-                <p>${process.env.CLIENT_URL}</p>
-            `
-        };
-
-        sgMail
-            .send(emailData)
-            .then(sent => {
-                // console.log('SIGNUP EMAIL SENT', sent)
-                return res.json({
-                    message: `Email has been sent to ${email}. Follow the instruction to activate your account`
-                });
+        newUser.save((err, success) => {
+            if (err) {
+                console.log('Signup Error', err);
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            res.json({
+                message: 'Signup Success please signin',
+                user: newUser
             })
-            .catch(error => {
-                // console.log('SIGNUP EMAIL SENT ERROR', err)
-                return res.json({
-                    message: error.message
-                });
-            });
-    });
-};
+        })
+    })
+}
+
+
+// exports.signup = (req, res) => {
+//     const { name, email, password, role , mobile} = req.body;
+
+//     User.findOne({ email }).exec((err, user) => {
+//         if (user) {
+//             return res.status(400).json({
+//                 error: 'Email is taken'
+//             });
+//         }
+
+//         const token = jwt.sign({ name, email, password, role , mobile}, process.env.JWT_ACCOUNT_ACTIVATION, { expiresIn: '10m' });
+
+//         const emailData = {
+//             to: email,
+//             from: process.env.EMAIL_FROM,
+//             subject: `Account activation link`,
+//             text: `Msg for verification`,
+//             html: `
+//                 <h1>Please use the following link to activate your account</h1>
+//                 <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
+//                 <hr />
+//                 <p>This email may contain sensetive information</p>
+//                 <p>${process.env.CLIENT_URL}</p>
+//             `
+//         };
+
+//         sgMail
+//             .send(emailData)
+//             .then(sent => {
+//                 // console.log('SIGNUP EMAIL SENT', sent)
+//                 return res.json({
+//                     message: `Email has been sent to ${email}. Follow the instruction to activate your account`
+//                 });
+//             })
+//             .catch(error => {
+//                 // console.log('SIGNUP EMAIL SENT ERROR', err)
+//                 return res.json({
+//                     message: error.message
+//                 });
+//             });
+//     });
+// };
 
 
 exports.accountActivation = (req, res) => {
@@ -245,7 +245,7 @@ exports.resetPassword = (req, res) => {
                 user = _.extend(user, updatedFields)
 
                 user.save((err, result) => {
-                    if(err) {
+                    if (err) {
                         return res.status(400).json({
                             error: 'Something went wrong while resetting password, Try later'
                         })

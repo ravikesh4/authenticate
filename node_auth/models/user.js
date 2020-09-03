@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const crypto = require('crypto')
+const {ObjectId} = mongoose.Schema.Types
 
 // user schema 
 const userSchema = new mongoose.Schema({
@@ -24,10 +25,20 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
     },
+    mobile: {
+        type: String,
+    },
+    company: {
+        type: String,
+    },
+    address: {
+        type: String,
+    },
     resetPasswordLink: {
         data: String,
         default: ''
-    }
+    },
+    messages: [{ type: ObjectId, ref: "User"}],
 }, {timestamps: true})
 
 // virtual fields 

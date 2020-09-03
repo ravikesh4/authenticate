@@ -15,9 +15,23 @@ exports.read = (req, res) => {
     })
 }
 
+exports.VendorRead = (req, res) => {
+
+    User.find({ "role": "vendor"}).exec((err, vendor) => {
+        if (err || !vendor) {
+            return res.status(400).json({
+                error: "vendors not found"
+            })
+        }
+        vendor.hashed_password = undefined;
+        vendor.salt = undefined;
+        res.json(vendor)
+    })
+}
+
 exports.update = (req, res) => {
     // console.log('Update User - req.user', req.user, 'Update data', req.body);
-    const { name, password } = req.body;
+    const { name, password, email, mobile, company, address } = req.body;
 
     User.findOne({ _id: req.user._id }, (err, user) => {
         if (err || !user) {
@@ -25,12 +39,16 @@ exports.update = (req, res) => {
                 error: 'User not found'
             })
         }
-        if (!name) {
+        if (!name || !email || !mobile || !company || !address) {
             return res.status(400).json({
-                error: 'Name is required'
+                error: 'All fields is required'
             })
         } else {
             user.name = name;
+            user.email = email;
+            user.mobile = mobile;
+            user.company = company;
+            user.address = address;
         }
 
         if (password) {

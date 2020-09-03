@@ -42,9 +42,9 @@ const Signin = ({ history }) => {
                     if (isAuth() && isAuth().role === 'admin') { 
                         history.push('/admin') 
                     } else if (isAuth() && isAuth().role === 'client'){ 
-                        history.push('client') 
+                        history.push('/client') 
                     } else {
-                        history.push('private') 
+                        history.push('/private') 
                     }
                 })
             })
